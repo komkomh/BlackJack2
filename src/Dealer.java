@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 // ディーラー
 public class Dealer extends Gamer {
 

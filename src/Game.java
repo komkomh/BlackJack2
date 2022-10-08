@@ -6,17 +6,21 @@ public class Game {
         // ゲームループ
         while (true) {
             // ディーラーを生成する
-            final var dealer = new Dealer();
+            final var dealer = new Dealer("ディーラー");
             // プレイヤーを生成する
-            final var player = new Player("testName");
-            // ディーラーの手番を実行する
-            dealer.execute();
+            final var player = new Player("プレイヤー");
+            // ディーラーは初期カードとして積み札からカードを2枚取得する
+            dealer.init();
+            // プレイヤーは初期カードとして積み札からカードを2枚取得する
+            player.init();
             // フレイヤーの手番を実行する
-            player.execute();
+            player.action();
+            // ディーラーの手番を実行する
+            dealer.action();
             // 勝敗を判定する
             judge(dealer, player);
             System.out.println("もう一度しますか？「はい」or「いいえ」");
-            if (isAgain()) {
+            if (question()) {
                 continue;
             }
             break;
@@ -25,7 +29,7 @@ public class Game {
     }
 
     // 再ゲームするかプレイヤーに確認する
-    private static boolean isAgain() {
+    private static boolean question() {
         while (true) {
             String yn = new Scanner(System.in).next();
             if (yn.equals("はい")) {
@@ -39,12 +43,22 @@ public class Game {
     }
 
     public static void judge(Dealer dealer, Player player) {
-        if (player.sum > dealer.sum && player.sum <= 21 || dealer.sum > 21 && player.sum <= 21) {
-            System.out.println(player.name + "の勝ちです");
-        } else if (dealer.sum > player.sum && dealer.sum <= 21 || player.sum > 21 && dealer.sum <= 21) {
-            System.out.println("ディーラーの勝ちです");
-        } else if (player.sum > 21 && dealer.sum > 21 || player.sum == dealer.sum) {
-            System.out.println("ドロー");
+        if (player.isBust()) {
+            System.out.println(dealer.name + "の勝ちです");
+            return;
         }
+        if (dealer.isBust()) {
+            System.out.println(player.name + "の勝ちです");
+            return;
+        }
+        if (dealer.getSumNumber() > player.getSumNumber()) {
+            System.out.println(player.name + "の勝ちです");
+            return;
+        }
+        if (player.getSumNumber() > dealer.getSumNumber()) {
+            System.out.println(player.name + "の勝ちです");
+            return;
+        }
+        System.out.println("ドロー");
     }
 }

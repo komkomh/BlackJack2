@@ -12,19 +12,10 @@ public class BlackJackGame {
 		name = str;
 	}
 
-	int initial(int total) {
-		for (int i = 1; i <= 2; ++i) {
-			int ran = new Random().nextInt(13) + 1;
-			total += ran;
-			new CardViewer(ran);
-		}
-		return total;
-	}
-
 	public void player() {
 		flag = true;
 
-		userSum = initial(userSum);
+		userSum += CardsStack.getInitialCards();
 
 		move(userSum, this.name, "初手");
 
@@ -55,7 +46,7 @@ public class BlackJackGame {
 	}
 
 	public void dealer() {
-		dealerSum = initial(dealerSum);
+		dealerSum += CardsStack.getInitialCards();
 		move(dealerSum, "ディーラー", "初手");
 		while (dealerSum < 17) {
 			System.out.println("ディーラーはもう一枚引きました");

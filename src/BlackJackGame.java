@@ -1,14 +1,14 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public class Controlle {
+public class BlackJackGame {
 	boolean flag = true;
 	int dealerSum = 0;
 	int userSum = 0;
 
 	private String name;
 
-	public Controlle(String str) {
+	public BlackJackGame(String str) {
 		name = str;
 	}
 
@@ -16,12 +16,12 @@ public class Controlle {
 		for (int i = 1; i <= 2; ++i) {
 			int ran = new Random().nextInt(13) + 1;
 			total += ran;
-			new Code(ran);
+			new CardViewer(ran);
 		}
 		return total;
 	}
 
-	public void user() {
+	public void player() {
 		flag = true;
 
 		userSum = initial(userSum);
@@ -29,24 +29,24 @@ public class Controlle {
 		move(userSum, this.name, "初手");
 
 		if (userSum > 21 || dealerSum > 21) {
-			judg();
+			judge();
 			flag = false;
 		}
 
-		while (flag == true) {
+		while (flag) {
 			System.out.println("もう一度引きますか？「はい」or「いいえ」");
 			String jud = new Scanner(System.in).next();
 
 			if (jud.equals("はい")) {
 				int ageinmas = new Random().nextInt(13) + 1;
-				new Code(ageinmas);
+				new CardViewer(ageinmas);
 				userSum += ageinmas;
 				move(userSum, this.name, "トータル");
 				if (userSum > 21) {
-					judg();
+					judge();
 				}
 			} else if (jud.equals("いいえ")) {
-				judg();
+				judge();
 				flag = false;
 			} else {
 				System.out.println("「はい」か「いいえ」で回答してください");
@@ -60,13 +60,13 @@ public class Controlle {
 		while (dealerSum < 17) {
 			System.out.println("ディーラーはもう一枚引きました");
 			int agein = new Random().nextInt(13) + 1;
-			new Code(agein);
+			new CardViewer(agein);
 			dealerSum += agein;
 			move(dealerSum, "ディーラー", "トータル");
 		}
 	}
 
-	public void judg() {
+	public void judge() {
 		if (userSum > dealerSum && userSum <= 21 || dealerSum > 21 && userSum <= 21) {
 			System.out.println(this.name + "の勝ちです");
 		} else if (dealerSum > userSum && dealerSum <= 21 || userSum > 21 && dealerSum <= 21) {
@@ -84,19 +84,19 @@ public class Controlle {
 		}
 	}
 
-	public void agein() {
-		boolean isagein = true;
+	public void again() {
+		boolean isAgain = true;
 
-		while (isagein == true) {
+		while (isAgain) {
 			System.out.println("もう一度しますか？「はい」or「いいえ」");
 			String yn = new Scanner(System.in).next();
 			if (yn.equals("はい")) {
 				dealerSum = 0;
 				userSum = 0;
 				dealer();
-				user();
+				player();
 			} else if (yn.equals("いいえ")) {
-				isagein = false;
+				isAgain = false;
 				System.out.println("終了しました");
 			} else {
 				System.out.println("「はい」か「いいえ」で回答してください");

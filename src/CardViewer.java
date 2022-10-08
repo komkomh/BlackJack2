@@ -1,7 +1,7 @@
 
-public class Code {
+public class CardViewer {
 
-	public Code(int code) {
+	public CardViewer(int code) {
 		String str = null;
 		switch(code) {
 		case 1:

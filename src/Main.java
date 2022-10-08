@@ -3,6 +3,7 @@ public class Main {
 		BlackJackGame con = new BlackJackGame("testName");
 		con.dealer();
 		con.player();
+		con.judge();
 		con.again();
 	}
 }

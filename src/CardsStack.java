@@ -2,7 +2,7 @@ import java.util.Random;
 
 // 積み札
 public class CardsStack {
-    private static int getCard() {
+    public static int getCard() {
         return new Random().nextInt(13) + 1;
     }
 

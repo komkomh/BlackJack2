@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class BlackJackGame {
 	boolean flag = true;
-	int dealerSum = 0;
+	private final Dealer dealer = new Dealer();
 	int userSum = 0;
 
 	private String name;
@@ -19,7 +19,7 @@ public class BlackJackGame {
 
 		move(userSum, this.name, "初手");
 
-		if (userSum > 21 || dealerSum > 21) {
+		if (userSum > 21 || dealer.sum > 21) {
 			judge();
 			flag = false;
 		}
@@ -46,30 +46,22 @@ public class BlackJackGame {
 	}
 
 	public void dealer() {
-		dealerSum += CardsStack.getInitialCards();
-		move(dealerSum, "ディーラー", "初手");
-		while (dealerSum < 17) {
-			System.out.println("ディーラーはもう一枚引きました");
-			int agein = new Random().nextInt(13) + 1;
-			new CardViewer(agein);
-			dealerSum += agein;
-			move(dealerSum, "ディーラー", "トータル");
-		}
+		dealer.execute();
 	}
 
 	public void judge() {
-		if (userSum > dealerSum && userSum <= 21 || dealerSum > 21 && userSum <= 21) {
+		if (userSum > dealer.sum && userSum <= 21 || dealer.sum > 21 && userSum <= 21) {
 			System.out.println(this.name + "の勝ちです");
-		} else if (dealerSum > userSum && dealerSum <= 21 || userSum > 21 && dealerSum <= 21) {
+		} else if (dealer.sum > userSum && dealer.sum <= 21 || userSum > 21 && dealer.sum <= 21) {
 			System.out.println("ディーラーの勝ちです");
-		} else if (userSum > 21 && dealerSum > 21 || userSum == dealerSum) {
+		} else if (userSum > 21 && dealer.sum > 21 || userSum == dealer.sum) {
 			System.out.println("ドロー");
 		}
 	}
 
 	public void move(int i, String str1, String str2) {
 		System.out.println(str1 + "の" + str2 + "は" + i);
-		if (!(i <= 21)) {
+		if (i > 21) {
 			flag = false;
 			System.out.println(str1 + "はオーバーです");
 		}
@@ -82,7 +74,7 @@ public class BlackJackGame {
 			System.out.println("もう一度しますか？「はい」or「いいえ」");
 			String yn = new Scanner(System.in).next();
 			if (yn.equals("はい")) {
-				dealerSum = 0;
+				dealer.sum = 0;
 				userSum = 0;
 				dealer();
 				player();

@@ -1,5 +1,6 @@
-import java.util.Scanner;
+import java.util.Optional;
 
+// ゲーム
 public class Game {
     public static void main(String[] args) {
 
@@ -18,9 +19,12 @@ public class Game {
             // ディーラーの手番を実行する
             dealer.action();
             // 勝敗を判定する
-            judge(dealer, player);
-            System.out.println("もう一度しますか？「はい」or「いいえ」");
-            if (question()) {
+            getWinner(dealer, player).ifPresentOrElse(
+                    winner -> System.out.println(winner.name + "の勝ちです"),
+                    () -> System.out.println("ドロー"));
+            // 再ゲームを問い合わせる
+            if (Common.question("もう一度しますか？「はい」or「いいえ」")) {
+                System.out.println("-----------------------");
                 continue;
             }
             break;
@@ -28,37 +32,29 @@ public class Game {
         System.out.println("終了しました");
     }
 
-    // 再ゲームするかプレイヤーに確認する
-    private static boolean question() {
-        while (true) {
-            String yn = new Scanner(System.in).next();
-            if (yn.equals("はい")) {
-                return true;
-            } else if (yn.equals("いいえ")) {
-                return false;
-            } else {
-                System.out.println("「はい」か「いいえ」で回答してください");
-            }
-        }
-    }
-
-    public static void judge(Dealer dealer, Player player) {
+    // 勝者を取得する
+    public static Optional<Gamer> getWinner(Dealer dealer, Player player) {
+        // プレイヤーがバーストしてれば
         if (player.isBust()) {
-            System.out.println(dealer.name + "の勝ちです");
-            return;
+            // 勝者はディーラー
+            return Optional.of(dealer);
         }
+        // ディーラーがバーストしてれば
         if (dealer.isBust()) {
-            System.out.println(player.name + "の勝ちです");
-            return;
+            // 勝者はプレイヤー
+            return Optional.of(player);
         }
+        // ディーラーが21に近ければ
         if (dealer.getSumNumber() > player.getSumNumber()) {
-            System.out.println(player.name + "の勝ちです");
-            return;
+            // 勝者はディーラー
+            return Optional.of(dealer);
         }
-        if (player.getSumNumber() > dealer.getSumNumber()) {
-            System.out.println(player.name + "の勝ちです");
-            return;
+        // プレイヤーが21に近ければ
+        if (dealer.getSumNumber() < player.getSumNumber()) {
+            // 勝者はプレイヤー
+            return Optional.of(player);
         }
-        System.out.println("ドロー");
+        // いずれでもなければ勝者はなし
+        return Optional.empty();
     }
 }
